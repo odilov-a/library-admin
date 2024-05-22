@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Students</title>
+  <title>Admins</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
   <style>
@@ -86,7 +86,7 @@
         <a class="nav-link" href="./logs.html">
           <i class="bi bi-pencil-square"></i> Actions
         </a>
-      </li>
+      </li>1
       <li class="nav-item sidebar-item">
         <a class="nav-link" id="logoutBtn" href="#">
           <i class="bi bi-box-arrow-left"></i> Logout
@@ -97,67 +97,57 @@
   <div class="main-content">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Students</span>
+        <span class="navbar-brand mb-0 h1">Admins</span>
       </div>
     </nav>
     <div class="container mt-3">
-      <form id="addStudentForm" method="post" enctype="multipart/form-data">
+      <form id="addAdminForm" method="post">
         <div class="row mt-4">
           <div class="col-md-4">
-            <label for="name" class="form-label">Write student full name:</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="Enter student full name"
+            <label for="username" class="form-label">Write username:</label>
+            <input type="text" class="form-control" id="login" name="login" placeholder="Enter username"
               required />
           </div>
           <div class="col-md-4">
-            <label for="username" class="form-label">Write student ID:</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Enter student ID"
+            <label for="password" class="form-label">Write password:</label>
+            <input type="text" class="form-control" id="password" name="password" placeholder="Enter password"
               required />
-          </div>
-          <div class="col-md-4">
-            <label for="image" class="form-label">Upload student image:</label>
-            <input type="file" class="form-control" id="image" name="image"
-              accept="image/png, image/jpeg, image/jpg, image/webp" required />
           </div>
         </div>
         <div class="d-grid gap-2 col-5 mx-auto" style="margin-top: 2%">
           <button type="submit" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Save student
+            <i class="bi bi-plus-circle"></i> Save admin
           </button>
         </div>
       </form>
     </div>
-    <div id="students" class="row row-cols-1 row-cols-md-3 g-3 mt-3"></div>
-    <div class="modal fade" id="updateStudentModal" tabindex="-1" aria-labelledby="updateStudentModalLabel"
+    <div id="admins" class="row row-cols-1 row-cols-md-3 g-3 mt-3"></div>
+    <div class="modal fade" id="updateAdminModal" tabindex="-1" aria-labelledby="updateAdminModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="updateStudentModalLabel">
-              Update student
+            <h5 class="modal-title" id="updateAdminModalLabel">
+              Update admin
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <form id="updateStudentForm" method="post" enctype="multipart/form-data">
-              <input type="hidden" id="studentIdToUpdate" name="studentIdToUpdate" />
+            <form id="updateAdminForm" method="post">
+              <input type="hidden" id="adminIdToUpdate" name="adminIdToUpdate" />
               <div class="mb-3">
-                <label for="updateName" class="form-label">Write student full name:</label>
-                <input type="text" class="form-control" id="updateName" name="name" required
-                  placeholder="Enter student full name" />
+                <label for="updateUsername" class="form-label">Write username:</label>
+                <input type="text" class="form-control" id="updateLogin" name="login" required
+                  placeholder="Enter username" />
               </div>
               <div class="mb-3">
-                <label for="updateUsername" class="form-label">Write student ID:</label>
-                <input type="text" class="form-control" id="updateUsername" name="username" required
-                  placeholder="Enter student ID" />
-              </div>
-              <div class="mb-3">
-                <label for="updateImage" class="form-label">Upload student image:</label>
-                <input type="file" class="form-control" id="updateImage" name="image"
-                  accept="image/png, image/jpeg, image/jpg, image/webp" required />
+                <label for="updatePassword" class="form-label">Write password:</label>
+                <input type="text" class="form-control" id="updatePassword" name="password" required
+                  placeholder="Enter password" />
               </div>
               <div style="margin-left: 65%">
                 <button type="submit" class="btn btn-warning">
-                  <i class="bi bi-pencil-square"></i> Update student
+                  <i class="bi bi-pencil-square"></i> Update admin
                 </button>
               </div>
             </form>
@@ -172,66 +162,64 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
   const BASE_URL = "http://localhost:3003/api";
-  const studentsContainer = document.getElementById("students");
-  const addStudentForm = document.getElementById("addStudentForm");
-  const updateStudentForm = document.getElementById("updateStudentForm");
-  const studentIdToUpdateInput = document.getElementById("studentIdToUpdate");
+  const adminsContainer = document.getElementById("admins");
+  const addAdminForm = document.getElementById("addAdminForm");
+  const updateAdminForm = document.getElementById("updateAdminForm");
+  const adminIdToUpdateInput = document.getElementById("adminIdToUpdate");
   const logoutBtn = document.getElementById("logoutBtn");
 
-  function fetchStudents() {
+  function fetchAdmins() {
     axios
-      .get(`${BASE_URL}/students`)
+      .get(`${BASE_URL}/users/get-all`)
       .then((response) => {
-        const students = response.data.data.reverse();
-        studentsContainer.innerHTML = "";
-        students.forEach((student) => {
+        const admins = response.data.data.reverse();
+        adminsContainer.innerHTML = "";
+        admins.forEach((admin) => {
           const card = document.createElement("div");
           card.classList.add("col");
           card.innerHTML = `
             <div class="card">
-              <img src="${student.image[0].medium}" style="height:300px; object-fit: cover;" class="card-img-top" alt="${student.name}" />
               <div class="card-body">
-                <h6 class="card-title">Student full name: ${student.name}</h6>
-                <p class="card-text">Student ID: ${student.username}</p>
-                <button class="btn btn-danger" data-id="${student._id}">
+                <h6 class="card-title">Admin username: ${admin.login}</h6>
+                <button class="btn btn-danger" data-id="${admin._id}">
                   <i class="bi bi-trash"></i> Delete</button>
-                <button class="btn btn-warning update-btn" data-id="${student._id}">
+                <button class="btn btn-warning update-btn" data-id="${admin._id}">
                   <i class="bi bi-pencil-square"></i> Update</button>
               </div>
             </div>
           `;
-          studentsContainer.appendChild(card);
+          adminsContainer.appendChild(card);
         });
       })
       .catch((error) => {
-        console.error("Error fetching students:", error);
+        console.error("Error fetching admins:", error);
       });
   }
 
-  addStudentForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const formData = new FormData(addStudentForm);
-  try {
-    await axios.post(`${BASE_URL}/students`, formData);
-    fetchStudents();
-    addStudentForm.reset();
-  } catch (error) {
-    if (error.response && error.response.status === 409) {
-      Swal.fire(
-        "Error",
-        "Username is not unique. Please choose a different username.",
-        "error"
-      );
-    } else {
-      console.error("Error adding student:", error);
+  addAdminForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const login = document.getElementById("login").value;
+    const password = document.getElementById("password").value;
+    try {
+      await axios.post(`${BASE_URL}/users/register`, { login, password });
+      fetchAdmins();
+      addAdminForm.reset();
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        Swal.fire(
+          "Error",
+          "Username is not unique. Please choose a different username.",
+          "error"
+        );
+      } else {
+        console.error("Error adding admin:", error);
+      }
     }
-  }
-}); 
+  });
 
-  studentsContainer.addEventListener("click", (event) => {
+  adminsContainer.addEventListener("click", (event) => {
     if (event.target.classList.contains("btn-danger")) {
-      const studentId = event.target.getAttribute("data-id");
-
+      const adminId = event.target.getAttribute("data-id");
       Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to revert this!",
@@ -243,63 +231,59 @@
       }).then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`${BASE_URL}/students/${studentId}`)
+            .delete(`${BASE_URL}/users/${adminId}`)
             .then(() => {
-              fetchStudents();
-              Swal.fire(
-                "Deleted!",
-                "Your student has been deleted.",
-                "success"
-              );
-              location.reload();
+              fetchAdmins();
+              Swal.fire("Deleted!", "Admin has been deleted.", "success");
             })
             .catch((error) => {
-              console.error("Error deleting student:", error);
+              console.error("Error deleting admin:", error);
               Swal.fire(
                 "Error!",
-                "An error occurred while deleting the student.",
+                "An error occurred while deleting the admin.",
                 "error"
               );
             });
         }
       });
     }
+
     if (event.target.classList.contains("update-btn")) {
-      const studentId = event.target.getAttribute("data-id");
+      const adminId = event.target.getAttribute("data-id");
       axios
-        .get(`${BASE_URL}/students/${studentId}`)
+        .get(`${BASE_URL}/users/${adminId}`)
         .then((response) => {
-          const student = response.data.data;
-          studentIdToUpdateInput.value = student._id;
-          document.getElementById("updateName").value = student.name;
-          document.getElementById("updateUsername").value = student.username;
-          document.getElementById("updateImage").placeholder = "Image selected";
-          const updateStudentModal = new bootstrap.Modal(
-            document.getElementById("updateStudentModal")
+          const admin = response.data.data;
+          adminIdToUpdateInput.value = admin._id;
+          document.getElementById("updateLogin").value = admin.login;
+          document.getElementById("updatePassword").value = ""; // Clear password field
+          const updateAdminModal = new bootstrap.Modal(
+            document.getElementById("updateAdminModal")
           );
-          updateStudentModal.show();
+          updateAdminModal.show();
         })
         .catch((error) => {
-          console.error("Error fetching student:", error);
+          console.error("Error fetching admin:", error);
         });
     }
   });
 
-  updateStudentForm.addEventListener("submit", (event) => {
+  updateAdminForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const formData = new FormData(updateStudentForm);
-    const studentId = studentIdToUpdateInput.value;
+    const adminId = adminIdToUpdateInput.value;
+    const login = document.getElementById("updateLogin").value;
+    const password = document.getElementById("updatePassword").value;
     axios
-      .put(`${BASE_URL}/students/${studentId}`, formData)
+      .put(`${BASE_URL}/users/${adminId}`, { login, password })
       .then(() => {
-        fetchStudents();
-        const updateStudentModal = bootstrap.Modal.getInstance(
-          document.getElementById("updateStudentModal")
+        fetchAdmins();
+        const updateAdminModal = bootstrap.Modal.getInstance(
+          document.getElementById("updateAdminModal")
         );
-        updateStudentModal.hide();
+        updateAdminModal.hide();
       })
       .catch((error) => {
-        console.error("Error updating student:", error);
+        console.error("Error updating admin:", error);
       });
   });
 
@@ -308,7 +292,7 @@
     window.location.href = "../index.html";
   });
 
-  fetchStudents();
+  fetchAdmins();
 });
 
   </script>
