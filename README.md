@@ -1,1 +1,1 @@
-library-client
+library-admin
