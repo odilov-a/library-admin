@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Students</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #f8f9fa;
+      padding-top: 3rem;
+    }
+
+    .sidebar-item {
+      padding: 0.5rem 1.5rem;
+      color: #495057;
+    }
+
+    .sidebar-item:hover {
+      background-color: #e9ecef;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./dashboard.html">
+          <i class="bi bi-house"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./authors.html">
+          <i class="bi bi-person"></i> Authors
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./categories.html">
+          <i class="bi bi-journal"></i> Categories
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./publishers.html">
+          <i class="bi bi-shop"></i> Publishers
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./books.html">
+          <i class="bi bi-book"></i> Books
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./search.html">
+          <i class="bi bi-search"></i> Search books
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./students.html">
+          <i class="bi bi-person"></i> Students
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./order.html">
+          <i class="bi bi-card-checklist"></i> Orders
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" id="logoutBtn" href="#">
+          <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="main-content">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Students</span>
+      </div>
+    </nav>
+    <div class="container mt-3">
+      <form id="addStudentForm" method="post" enctype="multipart/form-data">
+        <div class="row mt-4">
+          <div class="col-md-4">
+            <label for="name" class="form-label">Write student full name:</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter student full name"
+              required />
+          </div>
+          <div class="col-md-4">
+            <label for="username" class="form-label">Write student ID:</label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Enter student ID"
+              required />
+          </div>
+          <div class="col-md-4">
+            <label for="image" class="form-label">Upload student image:</label>
+            <input type="file" class="form-control" id="image" name="image"
+              accept="image/png, image/jpeg, image/jpg, image/webp" required />
+          </div>
+        </div>
+        <div class="d-grid gap-2 col-5 mx-auto" style="margin-top: 2%">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Save student
+          </button>
+        </div>
+      </form>
+    </div>
+    <div id="students" class="row row-cols-1 row-cols-md-3 g-3 mt-3"></div>
+    <div class="modal fade" id="updateStudentModal" tabindex="-1" aria-labelledby="updateStudentModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateStudentModalLabel">
+              Update student
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="updateStudentForm" method="post" enctype="multipart/form-data">
+              <input type="hidden" id="studentIdToUpdate" name="studentIdToUpdate" />
+              <div class="mb-3">
+                <label for="updateName" class="form-label">Write student full name:</label>
+                <input type="text" class="form-control" id="updateName" name="name" required
+                  placeholder="Enter student full name" />
+              </div>
+              <div class="mb-3">
+                <label for="updateUsername" class="form-label">Write student ID:</label>
+                <input type="text" class="form-control" id="updateUsername" name="username" required
+                  placeholder="Enter student ID" />
+              </div>
+              <div class="mb-3">
+                <label for="updateImage" class="form-label">Upload student image:</label>
+                <input type="file" class="form-control" id="updateImage" name="image"
+                  accept="image/png, image/jpeg, image/jpg, image/webp" required />
+              </div>
+              <div style="margin-left: 65%">
+                <button type="submit" class="btn btn-warning">
+                  <i class="bi bi-pencil-square"></i> Update student
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+  const BASE_URL = "http://localhost:3003/api";
+  const studentsContainer = document.getElementById("students");
+  const addStudentForm = document.getElementById("addStudentForm");
+  const updateStudentForm = document.getElementById("updateStudentForm");
+  const studentIdToUpdateInput = document.getElementById("studentIdToUpdate");
+  const logoutBtn = document.getElementById("logoutBtn");
+
+  function fetchStudents() {
+    axios
+      .get(`${BASE_URL}/students`)
+      .then((response) => {
+        const students = response.data.data.reverse();
+        studentsContainer.innerHTML = "";
+        students.forEach((student) => {
+          const card = document.createElement("div");
+          card.classList.add("col");
+          card.innerHTML = `
+            <div class="card">
+              <img src="${student.image[0].medium}" style="height:300px; object-fit: cover;" class="card-img-top" alt="${student.name}" />
+              <div class="card-body">
+                <h6 class="card-title">Student full name: ${student.name}</h6>
+                <p class="card-text">Student ID: ${student.username}</p>
+                <button class="btn btn-danger" data-id="${student._id}">
+                  <i class="bi bi-trash"></i> Delete</button>
+                <button class="btn btn-warning update-btn" data-id="${student._id}">
+                  <i class="bi bi-pencil-square"></i> Update</button>
+              </div>
+            </div>
+          `;
+          studentsContainer.appendChild(card);
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching students:", error);
+      });
+  }
+
+  addStudentForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const formData = new FormData(addStudentForm);
+  try {
+    await axios.post(`${BASE_URL}/students`, formData);
+    fetchStudents();
+    addStudentForm.reset();
+  } catch (error) {
+    if (error.response && error.response.status === 409) {
+      Swal.fire(
+        "Error",
+        "Username is not unique. Please choose a different username.",
+        "error"
+      );
+    } else {
+      console.error("Error adding student:", error);
+    }
+  }
+}); 
+
+  studentsContainer.addEventListener("click", (event) => {
+    if (event.target.classList.contains("btn-danger")) {
+      const studentId = event.target.getAttribute("data-id");
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .delete(`${BASE_URL}/students/${studentId}`)
+            .then(() => {
+              fetchStudents();
+              Swal.fire(
+                "Deleted!",
+                "Your student has been deleted.",
+                "success"
+              );
+              location.reload();
+            })
+            .catch((error) => {
+              console.error("Error deleting student:", error);
+              Swal.fire(
+                "Error!",
+                "An error occurred while deleting the student.",
+                "error"
+              );
+            });
+        }
+      });
+    }
+    if (event.target.classList.contains("update-btn")) {
+      const studentId = event.target.getAttribute("data-id");
+      axios
+        .get(`${BASE_URL}/students/${studentId}`)
+        .then((response) => {
+          const student = response.data.data;
+          studentIdToUpdateInput.value = student._id;
+          document.getElementById("updateName").value = student.name;
+          document.getElementById("updateUsername").value = student.username;
+          document.getElementById("updateImage").placeholder = "Image selected";
+          const updateStudentModal = new bootstrap.Modal(
+            document.getElementById("updateStudentModal")
+          );
+          updateStudentModal.show();
+        })
+        .catch((error) => {
+          console.error("Error fetching student:", error);
+        });
+    }
+  });
+
+  updateStudentForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(updateStudentForm);
+    const studentId = studentIdToUpdateInput.value;
+    axios
+      .put(`${BASE_URL}/students/${studentId}`, formData)
+      .then(() => {
+        fetchStudents();
+        const updateStudentModal = bootstrap.Modal.getInstance(
+          document.getElementById("updateStudentModal")
+        );
+        updateStudentModal.hide();
+      })
+      .catch((error) => {
+        console.error("Error updating student:", error);
+      });
+  });
+
+  logoutBtn.addEventListener("click", () => {
+    localStorage.removeItem("token");
+    window.location.href = "../index.html";
+  });
+
+  fetchStudents();
+});
+
+  </script>
+</body>
+
+</html>

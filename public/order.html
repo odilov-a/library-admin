@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Orders</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #f8f9fa;
+      padding-top: 3rem;
+    }
+
+    .sidebar-item {
+      padding: 0.5rem 1.5rem;
+      color: #495057;
+    }
+
+    .sidebar-item:hover {
+      background-color: #e9ecef;
+    }
+
+    .main-content {
+      margin-left: 250px;
+      padding: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./dashboard.html">
+          <i class="bi bi-house"></i> Dashboard
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./authors.html">
+          <i class="bi bi-person"></i> Authors
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./categories.html">
+          <i class="bi bi-journal"></i> Categories
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./publishers.html">
+          <i class="bi bi-shop"></i> Publishers
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./books.html">
+          <i class="bi bi-book"></i> Books
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./search.html">
+          <i class="bi bi-search"></i> Search books
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./students.html">
+          <i class="bi bi-person"></i> Students
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" href="./order.html">
+          <i class="bi bi-card-checklist"></i> Orders
+        </a>
+      </li>
+      <li class="nav-item sidebar-item">
+        <a class="nav-link" id="logoutBtn" href="#">
+          <i class="bi bi-box-arrow-left"></i> Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="main-content">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Orders</span>
+      </div>
+    </nav>
+    <div class="container mt-3">
+      <form id="addOrderForm" method="post">
+        <div class="row mt-6 mb-3">
+          <div class="col-md-6 mb-3">
+            <label for="student" class="form-label">Choose student:</label>
+            <select class="form-control" id="student" name="student" required>
+              <option value="">Choose a student</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="book" class="form-label">Choose book:</label>
+            <select class="form-control" id="book" name="book" required>
+              <option value="">Choose a book</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="take" class="form-label">Take date:</label>
+            <input type="date" class="form-control" id="take" name="take" required />
+          </div>
+          <div class="col-md-6">
+            <label for="give" class="form-label">Give date:</label>
+            <input type="date" class="form-control" id="give" name="give" required />
+          </div>
+        </div>
+        <div class="d-grid gap-2 col-5 mx-auto" style="margin-top: 2%">
+          <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Save order
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="container mt-3">
+      <div id="ordersContainer" class="row row-cols-1 row-cols-md-3 g-4"></div>
+    </div>
+    <div class="modal fade" id="updateOrderModal" tabindex="-1" aria-labelledby="updateOrderModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="updateOrderModalLabel">
+              Update order
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="updateOrderForm" method="post">
+              <input type="hidden" id="orderId" name="orderId" />
+              <div class="mb-3">
+                <label for="updateStudent" class="form-label">Choose student:</label>
+                <select class="form-control" id="updateStudent" name="updateStudent" required>
+                  <option value="">Choose a student</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="updateBook" class="form-label">Choose book:</label>
+                <select class="form-control" id="updateBook" name="updateBook" required>
+                  <option value="">Choose a book</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="updateTake" class="form-label">Take date:</label>
+                <input type="date" class="form-control" id="updateTake" name="updateTake" required />
+              </div>
+              <div class="mb-3">
+                <label for="updateGive" class="form-label">Give date:</label>
+                <input type="date" class="form-control" id="updateGive" name="updateGive" required />
+              </div>
+              <div class="d-grid gap-2 col-5 mx-auto">
+                <button type="submit" class="btn btn-warning">
+                  <i class="bi bi-pencil-square"></i> Update order
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const BASE_URL = "http://localhost:3003/api";
+      const addOrderForm = document.getElementById("addOrderForm");
+      const updateOrderForm = document.getElementById("updateOrderForm");
+      const ordersContainer = document.getElementById("ordersContainer");
+      const orderIdInput = document.getElementById("orderId");
+
+      function formatDate(dateString) {
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+      }
+
+      function fetchOrders() {
+        axios
+          .get(`${BASE_URL}/orders`)
+          .then((response) => {
+            const orders = response.data.data.reverse();
+            ordersContainer.innerHTML = "";
+            orders.forEach((order) => {
+              const orderElement = document.createElement("div");
+              orderElement.className = "col";
+              orderElement.innerHTML = `
+                  <div class="col">
+                    <div class="card h-100">
+                      <div class="card-body">
+                        <h6 class="card-title">${order.student.name} - ${order.book.title}</h6>
+                        <p class="card-text">Take date: ${formatDate(order.take)}</p>
+                        <p class="card-text">Give date: ${formatDate(order.give)}</p>
+                        <button class="btn btn-danger" data-id="${order._id}">
+                          <i class="bi bi-trash"></i> Delete</button>
+                        <button class="btn btn-warning" data-id="${order._id}">
+                          <i class="bi bi-pencil-square"></i> Update</button>
+                      </div>
+                    </div>
+                  </div>
+                `;
+              ordersContainer.appendChild(orderElement);
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching orders:", error);
+          });
+      }
+
+      fetchOrders();
+
+      function fetchStudents(selectElementId) {
+        axios
+          .get(`${BASE_URL}/students`)
+          .then((response) => {
+            const students = response.data.data;
+            const studentSelect = document.getElementById(selectElementId);
+            studentSelect.innerHTML = '<option value="">Choose a student</option>'; // Clear previous options
+            students.forEach((student) => {
+              const option = document.createElement("option");
+              option.value = student._id; // Assuming student ID is in "_id" field
+              option.textContent = student.name; // Assuming student name is in "name" field
+              studentSelect.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching students:", error);
+          });
+      }
+
+      function fetchBooks(selectElementId) {
+        axios
+          .get(`${BASE_URL}/books`)
+          .then((response) => {
+            const books = response.data.data;
+            const bookSelect = document.getElementById(selectElementId);
+            bookSelect.innerHTML = '<option value="">Choose a book</option>'; // Clear previous options
+            books.forEach((book) => {
+              const option = document.createElement("option");
+              option.value = book._id; // Assuming book ID is in "_id" field
+              option.textContent = book.title; // Assuming book title is in "title" field
+              bookSelect.appendChild(option);
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching books:", error);
+          });
+      }
+      fetchStudents("student");
+      fetchBooks("book");
+
+      addOrderForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const student = document.getElementById("student").value;
+        const book = document.getElementById("book").value;
+        const takeDate = document.getElementById("take").value;
+        const giveDate = document.getElementById("give").value;
+
+        axios
+          .post(`${BASE_URL}/orders`, {
+            student: student,
+            book: book,
+            take: takeDate,
+            give: giveDate,
+          })
+          .then((response) => {
+            fetchOrders();
+            addOrderForm.reset();
+            Swal.fire("Success", "Order added successfully", "success");
+          })
+          .catch((error) => {
+            console.error("Error adding order:", error);
+            Swal.fire("Error", "An error occurred", "error");
+          });
+      });
+
+      ordersContainer.addEventListener("click", function (event) {
+        if (event.target.closest(".btn-danger")) {
+          const orderId = event.target.closest(".btn-danger").getAttribute("data-id");
+          Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, delete it!",
+            cancelButtonText: "No, cancel!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              axios
+                .delete(`${BASE_URL}/orders/${orderId}`)
+                .then((response) => {
+                  fetchOrders();
+                  Swal.fire("Deleted!", "Order has been deleted.", "success");
+                  location.reload(); // Reload the page after deletion
+                })
+                .catch((error) => {
+                  console.error("Error deleting order:", error);
+                  Swal.fire("Error", "An error occurred", "error");
+                });
+            }
+          });
+        } else if (event.target.closest(".btn-warning")) {
+          const orderId = event.target.closest(".btn-warning").getAttribute("data-id");
+          axios
+            .get(`${BASE_URL}/orders/${orderId}`)
+            .then((response) => {
+              const order = response.data.data;
+              orderIdInput.value = order._id;
+              fetchStudents("updateStudent");
+              fetchBooks("updateBook");
+              document.getElementById("updateStudent").value = order.student._id;
+              document.getElementById("updateBook").value = order.book._id;
+              document.getElementById("updateTake").value = order.take;
+              document.getElementById("updateGive").value = order.give;
+              const updateOrderModal = new bootstrap.Modal(
+                document.getElementById("updateOrderModal")
+              );
+              updateOrderModal.show();
+            })
+            .catch((error) => {
+              console.error("Error fetching order:", error);
+            });
+        }
+      });
+
+      logoutBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      localStorage.removeItem("token");
+      window.location.href = "../index.html";
+    });
+
+      updateOrderForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const orderId = document.getElementById("orderId").value;
+        const student = document.getElementById("updateStudent").value;
+        const book = document.getElementById("updateBook").value;
+        const takeDate = document.getElementById("updateTake").value;
+        const giveDate = document.getElementById("updateGive").value;
+
+        axios
+          .put(`${BASE_URL}/orders/${orderId}`, {
+            student: student,
+            book: book,
+            take: takeDate,
+            give: giveDate,
+          })
+          .then((response) => {
+            fetchOrders();
+            const updateOrderModal = bootstrap.Modal.getInstance(document.getElementById("updateOrderModal"));
+            updateOrderModal.hide();
+            Swal.fire("Success", "Order updated successfully", "success");
+          })
+          .catch((error) => {
+            console.error("Error updating order:", error);
+            Swal.fire("Error", "An error occurred", "error");
+          });
+      });
+    });
+  </script>
+</body>
+
+</html>
