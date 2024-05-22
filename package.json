@@ -1,7 +1,7 @@
 {
   "name": "electron-express-app",
   "version": "1.0.0",
-  "description": "Library Admin Panel",
+  "description": "Library Super Admin Panel",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -16,7 +16,7 @@
   },
   "build": {
     "appId": "com.example.electron-express-app",
-    "productName": "Library Admin Panel",
+    "productName": "Library Super Admin Panel",
     "directories": {
       "output": "dist"
     },
